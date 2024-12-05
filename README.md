@@ -1,98 +1,57 @@
-# Análise de Código - Classe `User`
+# Etapa 3 - Análise de Complexidade Ciclomática
 
-Este documento apresenta uma análise detalhada dos possíveis problemas encontrados na implementação da classe `User`, além de sugestões de melhorias para aumentar a robustez, eficiência e segurança do código.
+Este documento apresenta o grafo de fluxo, o cálculo da complexidade ciclomática e os caminhos possíveis traçados.
 
 ---
 
-## 1. Problemas Identificados e Recomendações
+## 1. Complexidade Ciclomática
 
-### 1.1 Ausência de Tratamento Detalhado de Exceções
-O código não utiliza mensagens claras para o tratamento de exceções, dificultando a identificação e resolução de erros.
+A complexidade ciclomática é calculada com base na fórmula:  
+**M = E − N + 2P**
 
-**Recomendação:**  
-Adicione logs detalhados nos blocos `catch` para registrar informações relevantes sobre as exceções, como:
-```java
-catch (Exception e) {
-    System.err.println("Erro ao processar a operação: " + e.getMessage());
-    e.printStackTrace();
-}
-1.2 Falta de Fechamento da Conexão com o Banco de Dados
-A ausência de fechamento explícito da conexão pode causar vazamento de recursos, como conexões não liberadas.
+- **E**: Número de arestas = 18  
+- **N**: Número de nós = 16  
+- **P**: Número de componentes conectados (1 neste caso)
 
-Recomendação:
-Use o bloco try-with-resources para gerenciar automaticamente o fechamento da conexão:
+**Cálculo:**  
+M = 18 - 16 + 2(1)  
+M = 4
 
-java
-Copiar código
-try (Connection conn = DriverManager.getConnection(...)) {
-    // Operações com o banco de dados
-}
-Ou utilize um bloco finally para garantir o fechamento manual:
+**Conclusão:**  
+A complexidade ciclomática é 4, o que indica que há **4 caminhos possíveis** no grafo.
 
-java
-Copiar código
-finally {
-    if (conn != null) {
-        conn.close();
-    }
-}
-1.3 Falta de Validação das Entradas
-Os parâmetros login e senha não passam por validação, o que pode levar ao processamento de dados inválidos.
+---
 
-Recomendação:
-Implemente validações para assegurar que as entradas não sejam nulas ou vazias:
+## 2. Quantidade de Caminhos Possíveis
 
-java
-Copiar código
-if (login == null || login.isEmpty() || senha == null || senha.isEmpty()) {
-    throw new IllegalArgumentException("Login e senha devem ser preenchidos.");
-}
-1.4 Tratamento de Conexão Nula
-Não há verificações ou tratamento no caso de falha ao estabelecer a conexão com o banco, o que pode causar exceções inesperadas.
+### Primeiro Caminho:
+1 → 2 → 3 → 4 → 5 → 7 → 8 → 9 → 10 → 11 → 12 → 14 → 16
 
-Recomendação:
-Inclua verificações para confirmar se a conexão foi estabelecida antes de realizar operações:
+### Segundo Caminho:
+1 → 2 → 3 → 4 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 14 → 16
 
-java
-Copiar código
-if (conn == null) {
-    throw new IllegalStateException("Não foi possível conectar ao banco de dados.");
-}
-1.5 Inicialização da Variável nome
-A variável nome, que armazena o resultado da consulta SQL, pode permanecer não inicializada caso nenhum dado seja retornado, resultando em erros posteriores.
+### Terceiro Caminho:
+1 → 2 → 3 → 4 → 6 → 7 → 8 → 9 → 15 → 16
 
-Recomendação:
-Inicialize a variável com um valor padrão e trate adequadamente quando nenhum resultado for encontrado:
+### Quarto Caminho:
+1 → 2 → 3 → 4 → 5 → 7 → 8 → 9 → 15 → 16
 
-java
-Copiar código
-String nome = null;
-// Após a consulta
-if (resultSet.next()) {
-    nome = resultSet.getString("nome");
-} else {
-    throw new NoSuchElementException("Nenhum usuário encontrado com as credenciais fornecidas.");
-}
-2. Conclusão
-A implementação atual da classe User apresenta problemas que podem comprometer sua funcionalidade, eficiência e segurança. As recomendações apresentadas neste documento têm como objetivo:
+---
 
-Prevenir erros futuros com validações e tratamentos adequados.
-Aumentar a eficiência com o gerenciamento correto de recursos.
-Facilitar a manutenção com logs claros e boas práticas de programação.
-Seguindo essas melhorias, o código terá maior qualidade, segurança e confiabilidade.
+## 3. Grafo de Fluxo
 
-javascript
-Copiar código
+O grafo abaixo representa o fluxo de execução e os caminhos possíveis traçados:
 
-Basta salvar esse conteúdo como um arquivo chamado `README.md`. Isso criará um documento no formato Markdown com todas as informações detalhadas.
+![Grafo de Fluxo](grafo_fluxo.png)
 
+---
 
+## Linguagem Utilizada
 
+- **Java**: 100%
 
+---
 
+## Sobre
 
-
-
-
-
-O ChatGPT pode cometer e
+Este documento faz parte da análise de complexidade ciclomática para identificar os caminhos e decisões no código analisado.
